@@ -4,6 +4,7 @@ import {
     tasksPropsType,
     ToDoList
 } from "./ToDoList";
+import {v1} from "uuid";
 
 
 export type FilterTaskPropsType = "All" | "Active" | "Completed";
@@ -11,19 +12,25 @@ export type FilterTaskPropsType = "All" | "Active" | "Completed";
 function App() {
 
     const [tasks, setTasks] = useState<Array<tasksPropsType>>([
-        {id: 1, title: "js", isCheck: true},
-        {id: 2, title: "HTML/CSS", isCheck: true},
-        {id: 3, title: "REACT", isCheck: false},
+        {id: v1(), title: "js", isCheck: true},
+        {id: v1(), title: "HTML/CSS", isCheck: true},
+        {id: v1(), title: "REACT", isCheck: false},
     ])
 
     const [filter, setFilter] = useState<FilterTaskPropsType>("All")
 
-    const delTask = (id: number) => {
+    const delTask = (id: string) => {
         setTasks(tasks.filter(item => id != item.id))
     }
 
     const filterTasks = (value: FilterTaskPropsType) => {
         setFilter(value);
+    }
+
+    const addTask = (newTaskTitle:string) => {
+        let newTask = {id: v1(), title: newTaskTitle, isCheck: true};
+        let newTasks=[newTask, ...tasks];
+        setTasks(newTasks);
     }
 
     let valueFilterTasks;
@@ -32,10 +39,10 @@ function App() {
             valueFilterTasks = tasks;
             break;
         case "Active":
-            valueFilterTasks = tasks.filter(item => item.isCheck === false);
+            valueFilterTasks = tasks.filter(item => !item.isCheck);
             break;
         case "Completed":
-            valueFilterTasks = tasks.filter(item => item.isCheck === true);
+            valueFilterTasks = tasks.filter(item => item.isCheck);
             break;
     }
 
@@ -46,7 +53,9 @@ function App() {
                 title={"Job"}
                 tasks={valueFilterTasks}
                 delTask={delTask}
-                filterTasks={filterTasks}/>
+                filterTasks={filterTasks}
+                addTask={addTask}
+            />
         </div>
     );
 }
