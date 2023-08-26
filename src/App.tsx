@@ -17,6 +17,7 @@ function App() {
         {id: v1(), title: "REACT", isCheck: false},
     ])
 
+
     const [filter, setFilter] = useState<FilterTaskPropsType>("All")
 
     const delTask = (id: string) => {
@@ -31,6 +32,12 @@ function App() {
         let newTask = {id: v1(), title: newTaskTitle, isCheck: true};
         let newTasks=[newTask, ...tasks];
         setTasks(newTasks);
+    }
+
+    const updateCheckbox=(id:string, onCheck:boolean)=>{
+        let task=tasks.find((t)=>t.id===id);
+        if(task) task.isCheck=onCheck;
+        setTasks([...tasks]);
     }
 
     let valueFilterTasks;
@@ -55,6 +62,8 @@ function App() {
                 delTask={delTask}
                 filterTasks={filterTasks}
                 addTask={addTask}
+                updateCheckbox={updateCheckbox}
+                filter={filter}
             />
         </div>
     );
